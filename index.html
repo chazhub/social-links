@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +30,6 @@
             right: 0;
             bottom: 0;
             background: url('https://raw.githubusercontent.com/chazhub/social-links/main/background.jpg') center/cover no-repeat;
-            filter: blur(8px);
             z-index: -1;
         }
 
@@ -52,6 +52,7 @@
             0% {
                 background-position: 0%;
             }
+
             100% {
                 background-position: 100%;
             }
@@ -117,7 +118,7 @@
         #quote {
             font-style: italic;
             margin: 0;
-            font-size: 1em; /* Ukuran kecil */
+            font-size: 1em;
             font-weight: 400;
         }
 
@@ -125,36 +126,37 @@
             display: inline-block;
             background: white;
             width: 2px;
-            height: 1em; /* Sesuai dengan ukuran teks quote */
+            height: 1em;
             margin-left: 3px;
             animation: blink 0.7s infinite;
         }
 
         @keyframes blink {
-            0%, 100% {
+            0%,
+            100% {
                 opacity: 1;
             }
+
             50% {
                 opacity: 0;
             }
         }
 
         #clock {
-            font-size: 0.8em; /* Ukuran lebih kecil */
+            font-size: 0.8em;
             font-weight: 300;
             margin-top: 10px;
         }
 
         .footer {
             font-family: 'Lato', sans-serif;
-            margin-top: 30px;
-            font-size: 1em;
+            margin-top: 5px;
+            font-size: 0.7em;
             text-align: center;
             color: white;
             font-weight: 400;
         }
 
-        /* Media Query untuk perangkat seluler */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
@@ -179,7 +181,7 @@
             }
 
             #quote {
-                font-size: 0.9em; /* Ukuran sedikit lebih kecil */
+                font-size: 0.9em;
             }
 
             #clock {
@@ -191,7 +193,6 @@
             }
         }
 
-        /* Media Query untuk perangkat sangat kecil (misalnya smartphone dengan layar sangat kecil) */
         @media (max-width: 480px) {
             h1 {
                 font-size: 1.5em;
@@ -230,30 +231,56 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
     <audio id="background-audio" loop>
         <source src="https://raw.githubusercontent.com/chazhub/social-links/main/backsound.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
-    
+
     <script>
         const audio = document.getElementById("background-audio");
-    
+
         // Memastikan audio diputar setelah halaman dimuat
         document.addEventListener("DOMContentLoaded", () => {
             audio.play().catch((error) => {
                 console.log("Autoplay diblokir. Menunggu interaksi pengguna...");
             });
         });
-    
+
+        // Fungsi fade-in untuk audio
+        function fadeInAudio(audio, duration) {
+            let volume = 0;
+            audio.volume = volume;  // Mulai dengan volume 0
+            audio.play();
+
+            // Proses fade-in
+            const step = 0.01;
+            const interval = duration / (1 / step);
+
+            const fadeInterval = setInterval(() => {
+                if (volume < 1) {
+                    volume = Math.min(volume + step, 1);
+                    audio.volume = volume;
+                } else {
+                    clearInterval(fadeInterval);
+                }
+            }, interval);
+        }
+
+        // Memastikan audio diputar dengan efek fade-in setelah halaman dimuat
+        document.addEventListener("DOMContentLoaded", () => {
+            fadeInAudio(audio, 8000); // Durasi fade-in 5 detik
+        });
+
         // Menangkap interaksi pengguna jika autoplay diblokir
         document.addEventListener("click", () => {
             if (audio.paused) {
-                audio.play();
+                fadeInAudio(audio, 8000); // Durasi fade-in 5 detik
             }
         });
     </script>
-    
+
     <div class="container">
         <h1>Follow Me on Social Media</h1>
         <div class="social-buttons">
@@ -265,11 +292,6 @@
             <div class="button">
                 <a href="https://facebook.com/azmimfh" target="_blank">
                     <i class="fab fa-facebook-f"></i>
-                </a>
-            </div>
-            <div class="button">
-                <a href="https://wa.me/6281322554961" target="_blank">
-                    <i class="fab fa-whatsapp"></i>
                 </a>
             </div>
             <div class="button">
@@ -319,7 +341,7 @@
         function typeEffect() {
             const quoteElement = document.getElementById("quote");
             const currentQuote = quotes[quoteIndex];
-            
+
             if (isDeleting) {
                 quoteElement.textContent = currentQuote.slice(0, charIndex--);
             } else {
@@ -341,4 +363,5 @@
         typeEffect();
     </script>
 </body>
+
 </html>
